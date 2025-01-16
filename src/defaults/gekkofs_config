@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# binaries (default for project_dir/build
+PRELOAD_LIB=/lustre/miifs01/project/zdvresearch/nstoehr/bachelor/filesystem-benchmarking/filesystems/gekkofs/build/src/client/libgkfs_intercept.so
+DAEMON_BIN=/lustre/miifs01/project/zdvresearch/nstoehr/bachelor/filesystem-benchmarking/filesystems/gekkofs/build/src/daemon/gkfs_daemon
+PROXY_BIN=/lustre/miifs01/project/zdvresearch/nstoehr/bachelor/filesystem-benchmarking/filesystems/gekkofs/build/src/proxy/gkfs_proxy
+
+## client configuration
+LIBGKFS_HOSTS_FILE=/lustre/miifs01/project/zdvresearch/nstoehr/bachelor/filesystem-benchmarking/filesystems/gekkofs/daemon/hostfile
+
+## daemon configuration
+#DAEMON_ROOTDIR=/dev/shm/vef_gkfs_rootdir
+DAEMON_ROOTDIR=/localscratch/${SLURM_JOB_ID}/nstoehr_gkfs_rootdir
+DAEMON_MOUNTDIR=/dev/shm/nstoehr_gkfs_mountdir
+# additional daemon arguments (see `gkfs_daemon -h`)
+# use numactl to pin daemon to socket
+DAEMON_ARGS="-P ofi+sockets -l ib0 -c"
+# use cpu affinity. Set this eg to `taskset -c ...`
+#DAEMON_AFFINITY="taskset -c 64-127"
+DAEMON_AFFINITY=""
+
+## proxy configuration
+USE_PROXY=false
+DAEMON_PROXY_ARGS="--proxy-listen ib0 --proxy-protocol ofi+verbs"
+PROXY_LOCAL_PID_FILE=/dev/shm/nstoehr_gkfs_proxy.pid
+PROXY_ARGS="-p ofi+verbs"
+# use cpu affinity. Set this eg to `taskset -c ...`
+PROXY_AFFINITY="taskset -c 0-63"
+
+## slurm configuration
+# Use Slurm's srun to start the daemons on multiple nodes and set specific srun args
+USE_SRUN=true
+#DAEMON_NODELIST=/lustre/project/nhr-admire/vef/hostfile
+#PROXY_NODELIST=/lustre/project/nhr-admire/vef/hostfile
+SRUN_ARGS="--overlap --ntasks-per-node=1 --overcommit --overlap --oversubscribe --mem=0"
+# Specific srun args for daemon
+SRUN_DAEMON_ARGS=""
+# Specific srun args for proxy
+SRUN_PROXY_ARGS=""
+# path to daemon pid file; created where the script is run
+DAEMON_PID_FILE=/lustre/miifs01/project/zdvresearch/nstoehr/bachelor/filesystem-benchmarking/filesystems/gekkofs/daemon/gkfs_daemon.pid
+PROXY_PID_FILE=/lustre/miifs01/project/zdvresearch/nstoehr/bachelor/filesystem-benchmarking/filesystems/gekkofs/daemon/gkfs_proxy.pid
+
+# logging configuration
+GKFS_DAEMON_LOG_LEVEL=info
+GKFS_DAEMON_LOG_PATH=/dev/shm/nstoehr_gkfs_daemon.log
+GKFS_PROXY_LOG_LEVEL=info
+GKFS_PROXY_LOG_PATH=/dev/shm/nstoehr_gkfs_proxy.log
+LIBGKFS_LOG=errors,warnings
+LIBGKFS_LOG_OUTPUT=/dev/shm/nstoehr_gkfs_client.log

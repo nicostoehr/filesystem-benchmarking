@@ -1,0 +1,10 @@
+{
+    "fig_size_x": 10,
+    "fig_size_y": 6,
+    "bar_color": "grey",
+    "edge_color": "black",
+    "title_font_size": 16,
+    "label_font_size": 14,
+    "xticks_rotation": 45,
+    "grid_alpha": 0.7
+}

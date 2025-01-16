@@ -1,0 +1,25 @@
+# Modular Filesysteme Auto Benchmarking for HPC                MOFAB
+This tool provides a framework to build a pipeline for filesystem testing.
+MOFAB is portable, modular and can visualize benchmarking results.
+Benchmark apps and Filesystems can be build, configured and run automatically.
+Profiles provide the modular interface for expantion with other apps and filesystems.
+Testing results can then be formed into graphs.
+
+Individual .bashrc configs may be required for this programm to run corretly. Make sure all modules are loaded.
+Changes to specified configs might have to be applied.
+
+# Options
+Use the run.py and graphs.py interfaces to interact with the program. 
+No compilation required. Just git clone this repository.
+
+> run.py
+handles all downloading, building and running of the applications.
+Run "python3 run.py help" for more information.
+
+> graphs.py 
+handles visualizing results.
+Run "python3 graphs.py help" for more information.
+
+# Dependencies
+Python3 >= 3.6
+The pandas and matplotlib modules are needed to generating graphs.
